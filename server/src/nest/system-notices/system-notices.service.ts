@@ -33,15 +33,8 @@ export class SystemNoticesService {
    * neither loses only the notice it could not read anyway. Nothing is spent by
    * holding it back: a notice is used up by a dismissal and by nothing else.
    */
-  getActiveFor(userId: number, supports: ReadonlySet<string> = new Set(), uiVersion?: string): SystemNoticeDto[] {
-    const notices = getActiveNoticesFor(
-      userId,
-      (addonId) => this.addons.isAddonEnabled(addonId),
-      this.env.isManaged(),
-    ) as SystemNoticeDto[];
-    return supports.has('release') && this.bundleMatchesServer(uiVersion)
-      ? notices
-      : notices.filter(n => !n.release);
+  getActiveFor(_userId: number, _supports: ReadonlySet<string> = new Set(), _uiVersion?: string): SystemNoticeDto[] {
+    return [];
   }
 
   /** Whether the bundle asking was built for the version this server runs. */

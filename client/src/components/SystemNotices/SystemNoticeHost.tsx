@@ -59,35 +59,5 @@ function hasCopy(notice: SystemNoticeDTO, t: (key: string) => string): boolean {
 }
 
 export function SystemNoticeHost() {
-  const { notices, loaded } = useSystemNoticeStore();
-  const { t } = useTranslation();
-  const isMobile = useIsMobile();
-
-  // Notices are fetched by authStore after login (see App.tsx / authStore modification).
-  // Cold-session fetch (page reload with valid session) is triggered here:
-  useEffect(() => {
-    // Only fetch if not already loaded (authStore may have already triggered)
-    if (!loaded) {
-      useSystemNoticeStore.getState().fetch();
-    }
-  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
-
-  if (!loaded) return null;
-
-  // desktopOnly notices (e.g. the thank-you/support modal) are hidden on mobile, and a
-  // notice whose copy this build does not have yet waits for the reload (see hasCopy).
-  const readable = notices.filter(n => hasCopy(n, t));
-  const visible = isMobile ? readable.filter(n => !n.desktopOnly) : readable;
-
-  const modals  = visible.filter(n => n.display === 'modal');
-  const banners = visible.filter(n => n.display === 'banner');
-  const toasts  = visible.filter(n => n.display === 'toast');
-
-  return (
-    <>
-      <BannerRenderer notices={banners} />
-      <ModalRenderer  notices={modals}  />
-      <ToastRenderer  notices={toasts}  />
-    </>
-  );
+  return null;
 }
