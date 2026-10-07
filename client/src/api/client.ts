@@ -1634,4 +1634,25 @@ export const inAppNotificationsApi = {
       apiClient.post(`/notifications/in-app/${id}/respond`, { response }).then(r => r.data),
 }
 
+export const aiApi = {
+  status: (apiKey?: string) =>
+    apiClient.get('/ai/status', { params: apiKey ? { apiKey } : {} }).then(r => r.data as { configured: boolean; model: string }),
+  planItinerary: (payload: {
+    destination: string
+    days: number
+    budget: string
+    currency: string
+    weather: string
+    travelStyle: string
+    interests: string[]
+    startDate?: string
+    apiKey?: string
+  }) => apiClient.post('/ai/plan-itinerary', payload, { timeout: 90000 }).then(r => r.data),
+  chat: (payload: {
+    messages: Array<{ role: 'user' | 'assistant'; content: string }>
+    tripContext?: Record<string, unknown>
+    apiKey?: string
+  }) => apiClient.post('/ai/chat', payload, { timeout: 60000 }).then(r => r.data as { reply: string }),
+}
+
 export default apiClient

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { LayoutGrid, CalendarDays, Globe, Compass, Bookmark, type LucideIcon } from 'lucide-react'
+import { LayoutGrid, CalendarDays, Globe, Compass, Bookmark, Sparkles, Bot, type LucideIcon } from 'lucide-react'
 import { useTranslation } from '../../i18n'
 import { useAddonStore } from '../../store/addonStore'
 import { usePluginStore } from '../../store/pluginStore'
@@ -46,7 +46,7 @@ export const MOBILE_NAV_MAX_BAR = 2
  * dock it has today. Listing all four known global addons rather than just the
  * top two also keeps the dock filled when one of them is switched off.
  */
-export const DEFAULT_DOCK_IDS = ['vacay', 'journey', 'atlas', 'collections']
+export const DEFAULT_DOCK_IDS = ['volunteer', 'ai-planner', 'vacay', 'journey', 'atlas', 'collections']
 
 export function buildNavItems(
   globalAddons: { id: string; name: string; icon: string }[],
@@ -55,6 +55,8 @@ export function buildNavItems(
 ): NavItemDef[] {
   return [
     { id: 'dashboard', to: '/dashboard', label: t('nav.myTrips'), icon: LayoutGrid, pinned: true },
+    { id: 'volunteer', to: '/volunteer', label: 'Volunteer & Earn', icon: Sparkles },
+    { id: 'ai-planner', to: '/ai-planner', label: 'AI Planner', icon: Bot },
     ...globalAddons.map((a) => {
       const key = `admin.addons.catalog.${a.id}.name`
       const translated = t(key)

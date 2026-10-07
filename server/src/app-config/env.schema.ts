@@ -161,6 +161,8 @@ export const envSchema = z.object({
   DEMO_ADMIN_USER: anyString,
   DEMO_ADMIN_EMAIL: anyString,
   DEMO_ADMIN_PASS: anyString,
+  GEMINI_API_KEY: anyString,
+  VITE_GEMINI_API_KEY: anyString,
 
   // API docs / plugins
   TREK_API_DOCS_ENABLED: boolStr,

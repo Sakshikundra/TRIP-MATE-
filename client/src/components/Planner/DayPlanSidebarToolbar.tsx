@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { ChevronsDownUp, ChevronsUpDown, Download, Undo2, ArrowUpDown, Route as RouteIcon } from 'lucide-react'
+import { ChevronsDownUp, ChevronsUpDown, Download, Undo2, ArrowUpDown, Route as RouteIcon, Sparkles } from 'lucide-react'
 import { DayReorderPopup } from './DayReorderPopup'
 import Tooltip from '../shared/Tooltip'
 import { useToast } from '../shared/Toast'
 import { TripExportModal } from './TripExportModal'
+import { AiAssistantModal } from './AiAssistantModal'
 import { isRoutableReservation } from '../../utils/reservationRoutes'
 import type { DayAddControls } from '../../utils/dayAdd'
 import type { DayDeleteQuestion } from '../../utils/dayImpactLines'
@@ -56,10 +57,37 @@ export function DayPlanSidebarToolbar({
 }: DayPlanSidebarToolbarProps) {
   const [reorderOpen, setReorderOpen] = useState(false)
   const [exportOpen, setExportOpen] = useState(false)
+  const [aiAssistantOpen, setAiAssistantOpen] = useState(false)
 
   return (
     <div className="border-b border-edge-faint" style={{ padding: '12px 16px', flexShrink: 0 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 8 }}>
+        <Tooltip label="Build itinerary with AI (weather, days & budget)" placement="bottom">
+          <button
+            type="button"
+            onClick={() => setAiAssistantOpen(true)}
+            aria-haspopup="dialog"
+            aria-expanded={aiAssistantOpen}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0,
+              padding: '5px 10px', borderRadius: 8, border: 'none',
+              fontSize: 'calc(11px * var(--fs-scale-caption, 1))', fontWeight: 600,
+              cursor: 'pointer', fontFamily: 'inherit',
+              background: 'linear-gradient(135deg, #ff6b35, #f7931e)',
+              color: 'white',
+              boxShadow: '0 2px 8px rgba(255, 107, 53, 0.28)',
+            }}
+          >
+            <Sparkles size={13} strokeWidth={2.2} />
+            AI Assistant
+          </button>
+        </Tooltip>
+        <AiAssistantModal
+          isOpen={aiAssistantOpen}
+          onClose={() => setAiAssistantOpen(false)}
+          trip={trip}
+          days={days}
+        />
         {/* One export button instead of three: PDF, ICS and GPX each carried
             their own hover menu, and on a narrower sidebar the row ran out of
             width and pushed them off the edge. The dialog holds every option. */}

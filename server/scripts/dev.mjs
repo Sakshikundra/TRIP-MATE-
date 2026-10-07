@@ -23,7 +23,7 @@ tsc.stdout.on('data', (chunk) => {
   process.stdout.write(chunk);
   if (!ready && chunk.toString().includes('Watching for file changes')) {
     ready = true;
-    nodeProc = spawn('node', ['--require', 'tsconfig-paths/register', '--watch', 'dist/index.js'], {
+    nodeProc = spawn('node', ['--require', 'tsconfig-paths/register', '--watch-path=dist', 'dist/index.js'], {
       stdio: 'inherit',
       shell: true,
     });

@@ -2,10 +2,10 @@ import type { TranslationStrings } from '../types';
 
 const login: TranslationStrings = {
   'login.error': 'Login failed. Please check your credentials.',
-  'login.tagline': 'Your Trips.\nYour Plan.',
-  'login.description': 'Plan trips collaboratively with interactive maps, budgets, and real-time sync.',
+  'login.tagline': "India's Smart Travel Planner",
+  'login.description': 'Plan incredible journeys across India with live collaboration, interactive maps & budgets.',
   'login.title': 'Sign In',
-  'login.subtitle': 'Welcome back',
+  'login.subtitle': 'Welcome back to TripMate',
   'login.signingIn': 'Signing in…',
   'login.signIn': 'Sign In',
   'login.createAdmin': 'Create Admin Account',
