@@ -60,6 +60,7 @@ const InAppNotificationsPage = lazyWithRetry(() => import('./pages/InAppNotifica
 const OAuthAuthorizePage = lazyWithRetry(() => import('./pages/OAuthAuthorizePage'))
 const VolunteerPage = lazyWithRetry(() => import('./pages/VolunteerPage'))
 const AiPlannerPage = lazyWithRetry(() => import('./pages/AiPlannerPage'))
+const RewardsPage = lazyWithRetry(() => import('./pages/RewardsPage'))
 
 // The ten phone screens are chunks of their own, alongside the desktop pages
 // rather than inside them. Each page used to import its M screen statically and
@@ -423,6 +424,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <AiPlannerPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/rewards"
+            element={
+              <ProtectedRoute>
+                <RewardsPage />
               </ProtectedRoute>
             }
           />

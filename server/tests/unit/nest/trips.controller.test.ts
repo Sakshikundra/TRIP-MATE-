@@ -21,6 +21,7 @@ import type { AuditService } from '../../../src/nest/audit/audit.service';
 import type { TripsService } from '../../../src/nest/trips/trips.service';
 import type { CalendarService } from '../../../src/nest/calendar/calendar.service';
 import type { TripReadModelService } from '../../../src/nest/trip-read-model/trip-read-model.service';
+import type { RewardsService } from '../../../src/nest/rewards/rewards.service';
 import { NotFoundError, ValidationError } from '../../../src/nest/trips/trips.service';
 import type { User } from '../../../src/types';
 import { MAX_TRIP_DAYS, activeTripResponseSchema, tripCreateRequestSchema, tripTransferOwnershipRequestSchema } from '@trek/shared';
@@ -37,8 +38,9 @@ const audit = { writeAudit } as unknown as AuditService;
 // calendar and readModel are optional so the call sites that reach neither the
 // ICS route nor the bundle stay as they were; the ones that do pass a stub.
 const storageStub = { put: vi.fn().mockResolvedValue(undefined) } as unknown as import('../../../src/nest/storage/storage.service').StorageService;
+const rewardsStub = { award: vi.fn() } as unknown as RewardsService;
 const tc = (s: TripsService, calendar?: Partial<CalendarService>, readModel?: Partial<TripReadModelService>) =>
-  new TripsController(s, audit, new RuntimeEnvService(), unsplashStub, (calendar ?? {}) as CalendarService, (readModel ?? {}) as TripReadModelService, storageStub);
+  new TripsController(s, audit, new RuntimeEnvService(), unsplashStub, (calendar ?? {}) as CalendarService, (readModel ?? {}) as TripReadModelService, storageStub, rewardsStub);
 
 function svc(o: Partial<TripsService> = {}): TripsService {
   return {

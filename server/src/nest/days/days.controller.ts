@@ -17,6 +17,7 @@ import { DayCreateDto, DayReorderDto, DayTransportDto, DayUpdateDto } from './da
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { RequirePermission, TripAccessGuard } from '../permissions/trip-access.guard';
+import { RewardsService } from '../rewards/rewards.service';
 
 /**
  * /api/trips/:tripId/days — trip itinerary days.
@@ -33,7 +34,15 @@ import { RequirePermission, TripAccessGuard } from '../permissions/trip-access.g
 // go through that method, and this keeps the two from drifting.
 @UseGuards(JwtAuthGuard, TripAccessGuard)
 export class DaysController {
-  constructor(private readonly days: DaysService, private readonly removal: DayRemovalService) {}
+  constructor(private readonly days: DaysService, private readonly removal: DayRemovalService, private readonly rewards: RewardsService) {}
+
+  private awardDayPlanned(userId: number, tripId: string): void {
+    try {
+      this.rewards.award(userId, tripId, 'DAY_PLANNED');
+    } catch (error) {
+      console.error('Failed to award day planning points:', error);
+    }
+  }
 
   @Get()
   list(@CurrentUser() user: User, @Param('tripId') tripId: string) {
@@ -48,7 +57,11 @@ export class DaysController {
     @Body() body: DayCreateDto,
     @Headers('x-socket-id') socketId?: string,
   ) {
-    if (body.dated) return this.appendDated(tripId, user, body.notes, socketId);
+    if (body.dated) {
+      const result = this.appendDated(tripId, user, body.notes, socketId);
+      this.awardDayPlanned(user.id, tripId);
+      return result;
+    }
     // A `position` means "insert a new empty day here" (which on a dated trip
     // extends the trip and re-pins dates); without it, the legacy append.
     if (body.position !== undefined) {
@@ -59,11 +72,13 @@ export class DaysController {
       this.days.broadcast(tripId, 'day:reordered', { day }, socketId);
       const trip = this.days.getTripForViewer(tripId, user.id);
       if (trip) this.days.broadcast(tripId, 'trip:updated', { trip }, socketId);
+      this.awardDayPlanned(user.id, tripId);
       return { day, trip };
     }
     // A plain append only needs the new day.
     const day = this.days.create(tripId, body.date, body.notes);
     this.days.broadcast(tripId, 'day:created', { day }, socketId);
+    this.awardDayPlanned(user.id, tripId);
     return { day };
   }
 

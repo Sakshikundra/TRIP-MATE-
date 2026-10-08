@@ -13,6 +13,7 @@ import { QueryHelpersModule } from '../query-helpers/query-helpers.module';
 import { PlacesModule } from '../places/places.module';
 import { AuthModule } from '../auth/auth.module';
 import { McpSharedModule } from '../mcp-shared/mcp-shared.module';
+import { RewardsModule } from '../rewards/rewards.module';
 
 /**
  * Days (S6 — Phase 2 trip sub-domain), mounted at /api/trips/:tripId/days.
@@ -32,6 +33,7 @@ import { McpSharedModule } from '../mcp-shared/mcp-shared.module';
   imports: [
     McpSharedModule, PermissionsModule, QueryHelpersModule, PlacesModule, AuthModule, RealtimeModule, PluginGuardsModule,
     AccommodationsDomainModule, AssignmentsDomainModule,
+    RewardsModule,
   ],
   controllers: [DaysController],
   providers: [DaysService, DayRemovalService, DaysMcp, DaysRpc],

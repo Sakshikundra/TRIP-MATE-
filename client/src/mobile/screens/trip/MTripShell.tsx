@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ComponentType, type ReactNode } from 
 import { findFocusDayId } from '../../../components/Planner/today'
 import {
   CalendarDays, ChevronDown, ChevronLeft, Download, FileDown, List, Map as MapIcon, MoreHorizontal,
-  FolderSync, Plane, Plus, Rows3, Route, SlidersHorizontal, Trash2, Upload,
+  FolderSync, Plane, Plus, Rows3, Route, SlidersHorizontal, Trash2, Trophy, Upload,
 } from 'lucide-react'
 import { useTripPlanner } from '../../../pages/tripPlanner/useTripPlanner'
 import { pickDockTabs } from './dockTabs'
@@ -706,17 +706,28 @@ export default function MTripShell({
         {/* Same slot, same markup, same icons in both map tabs, so the switch does
             not move or change shape when the tab does. The two views stay separate
             states: coupling them would drag one tab into the other's half. */}
-        {MAP_TABS.has(trTab) ? (
-          <MIconBtn
-            ariaLabel={mapFront ? t('mobileTrip.listView') : t('mobileTrip.mapView')}
-            onClick={trTab === 'roadtrip' ? toggleRtView : toggleView}
-            className="backdrop-blur-[24px] backdrop-saturate-[1.7]"
-          >
-            {mapFront ? <List size={18} strokeWidth={2} /> : <MapIcon size={18} strokeWidth={2} />}
-          </MIconBtn>
-        ) : (
-          <span className="w-[38px] flex-none" />
-        )}
+        <div className="flex flex-none items-center gap-1">
+          {planner.can('trip_edit', trip) && (
+            <MIconBtn
+              ariaLabel="Mark trip completed"
+              onClick={() => { void planner.handleCompleteTrip() }}
+              className="backdrop-blur-[24px] backdrop-saturate-[1.7]"
+            >
+              <Trophy size={17} strokeWidth={2} />
+            </MIconBtn>
+          )}
+          {MAP_TABS.has(trTab) ? (
+            <MIconBtn
+              ariaLabel={mapFront ? t('mobileTrip.listView') : t('mobileTrip.mapView')}
+              onClick={trTab === 'roadtrip' ? toggleRtView : toggleView}
+              className="backdrop-blur-[24px] backdrop-saturate-[1.7]"
+            >
+              {mapFront ? <List size={18} strokeWidth={2} /> : <MapIcon size={18} strokeWidth={2} />}
+            </MIconBtn>
+          ) : (
+            <span className="w-[38px] flex-none" />
+          )}
+        </div>
       </div>
 
       {/* ── Bottom dock (replaces the global bottom nav on this screen) ── */}

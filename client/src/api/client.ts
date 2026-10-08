@@ -70,6 +70,12 @@ import {
   RoadtripViaCreateRequest,
   RoadtripViaReanchorRequest,
   RoadtripViaUpdateRequest,
+  type RewardsMeResponse,
+  type RewardsLeaderboardResponse,
+  type RewardsCatalogResponse,
+  type RewardRedeemResponse,
+  type RewardRedeemRequest,
+  type TripCompletionResponse,
 } from '@trek/shared'
 import { getSocketId } from './websocket'
 import { probeNow } from '../sync/connectivity'
@@ -432,6 +438,16 @@ export const tripsApi = {
   deleteGuest: (id: number | string, userId: number) => apiClient.delete(`/trips/${id}/guests/${userId}`).then(r => r.data),
   copy: (id: number | string, data?: TripCopyRequest) => apiClient.post(`/trips/${id}/copy`, data || {}).then(r => r.data),
   bundle: (id: number | string) => apiClient.get(`/trips/${id}/bundle`).then(r => r.data),
+}
+
+export const rewardsApi = {
+  me: (): Promise<RewardsMeResponse> => apiClient.get('/rewards/me').then(r => r.data),
+  leaderboard: (): Promise<RewardsLeaderboardResponse> => apiClient.get('/rewards/leaderboard').then(r => r.data),
+  catalog: (): Promise<RewardsCatalogResponse> => apiClient.get('/rewards/catalog').then(r => r.data),
+  redeem: (rewardId: number): Promise<RewardRedeemResponse> =>
+    apiClient.post('/rewards/redeem', { rewardId } satisfies RewardRedeemRequest).then(r => r.data),
+  completeTrip: (tripId: number | string): Promise<TripCompletionResponse> =>
+    apiClient.post(`/rewards/trips/${tripId}/complete`).then(r => r.data),
 }
 
 export const daysApi = {

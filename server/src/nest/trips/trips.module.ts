@@ -33,6 +33,7 @@ import { StorageService } from '../storage/storage.service';
 import { buildStorageUploadOptions } from '../storage/storage-upload.factory';
 import { MAX_COVER_SIZE, TRIP_COVER_FILE_FILTER } from './trips.controller';
 import { SettingsModule } from '../settings/settings.module';
+import { RewardsModule } from '../rewards/rewards.module';
 
 /** Trips aggregate root (C1 — Phase 3). Uses exact strangler prefixes so it does
  *  not capture the nested sub-domain mounts (collab, files, ...). */
@@ -49,7 +50,7 @@ import { SettingsModule } from '../settings/settings.module';
         }),
     }),
     StorageModule,
-    McpSharedModule, TodoModule, PackingModule, FilesModule, ReservationsModule, DaysModule, PermissionsModule, AuditModule, BudgetModule, CollabModule, VacayModule, PlacesModule, AuthModule, AppConfigModule, UnsplashModule, RealtimeModule, PluginGuardsModule, AddonsModule, TripMembershipModule, CalendarModule, AccommodationsModule, TripMembersModule, TripReadModelModule, SettingsModule],
+    McpSharedModule, TodoModule, PackingModule, FilesModule, ReservationsModule, DaysModule, PermissionsModule, AuditModule, BudgetModule, CollabModule, VacayModule, PlacesModule, AuthModule, AppConfigModule, UnsplashModule, RealtimeModule, PluginGuardsModule, AddonsModule, TripMembershipModule, CalendarModule, AccommodationsModule, TripMembersModule, TripReadModelModule, SettingsModule, RewardsModule],
   controllers: [TripsController],
   providers: [TripsService, TripsMcp, TripPromptsMcp, TripsRpc],
   // Exported for FeedsModule (ICS feeds) and PluginsModule (RPC host injection).

@@ -5285,6 +5285,35 @@ function runMigrations(db: Database.Database): void {
         END
       `);
     },
+    () => {
+      db.exec(`
+        CREATE TABLE IF NOT EXISTS points_ledger (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+          trip_id INTEGER REFERENCES trips(id) ON DELETE SET NULL,
+          action TEXT NOT NULL,
+          points INTEGER NOT NULL,
+          created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+          UNIQUE(user_id, trip_id, action)
+        );
+        CREATE INDEX IF NOT EXISTS idx_points_ledger_user ON points_ledger(user_id);
+        CREATE TABLE IF NOT EXISTS rewards (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          name TEXT NOT NULL UNIQUE,
+          points_required INTEGER NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS user_rewards (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+          reward_id INTEGER NOT NULL REFERENCES rewards(id) ON DELETE CASCADE,
+          coupon_code TEXT NOT NULL UNIQUE,
+          redeemed_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+        INSERT OR IGNORE INTO rewards (name, points_required) VALUES
+          ('5% hotel discount', 100),
+          ('10% cashback coupon', 250);
+      `);
+    },
   ];
 
   if (currentVersion < migrations.length) {

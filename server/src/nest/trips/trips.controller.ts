@@ -37,6 +37,7 @@ import { TripCreateDto, TripUpdateDto, TripCopyDto, TripAddMemberDto, TripTransf
 import { UnsplashService } from '../unsplash/unsplash.service';
 import { CalendarService } from '../calendar/calendar.service';
 import { TripReadModelService } from '../trip-read-model/trip-read-model.service';
+import { RewardsService } from '../rewards/rewards.service';
 
 export const MAX_COVER_SIZE = 20 * 1024 * 1024;
 // Still needed by the Unsplash cover download (a raw-fs writer until the
@@ -67,7 +68,7 @@ const addDays = (d: Date, n: number) => { const r = new Date(d); r.setDate(r.get
 export class TripsController {
   // calendar last: the hand-wired construction sites in the tests stay positional,
   // so a new dependency does not touch the ones that never reach the ICS route.
-  constructor(private readonly trips: TripsService, private readonly audit: AuditService, private readonly env: RuntimeEnvService, private readonly unsplash: UnsplashService, private readonly calendar: CalendarService, private readonly readModel: TripReadModelService, private readonly storage: StorageService) {}
+  constructor(private readonly trips: TripsService, private readonly audit: AuditService, private readonly env: RuntimeEnvService, private readonly unsplash: UnsplashService, private readonly calendar: CalendarService, private readonly readModel: TripReadModelService, private readonly storage: StorageService, private readonly rewards: RewardsService) {}
 
   @Get()
   list(@CurrentUser() user: User, @Query('archived') archived?: string) {
@@ -119,6 +120,7 @@ export class TripsController {
     const parsedDayCount = day_count ? Math.min(Math.max(Number(day_count) || 7, 1), MAX_TRIP_DAYS) : undefined;
     try {
       const { trip, tripId, reminderDays } = this.trips.create(user.id, { title, description, start_date, end_date, currency, reminder_days, day_count: parsedDayCount });
+      try { this.rewards.award(user.id, tripId, 'TRIP_CREATED'); } catch (error) { console.error('Failed to award trip creation points:', error); }
       this.audit.writeAudit({ userId: user.id, action: 'trip.create', ip: getClientIp(req), details: { tripId, title, reminder_days: reminderDays === 0 ? 'none' : `${reminderDays} days` } });
       if (reminderDays > 0) logInfo(`${user.email} set ${reminderDays}-day reminder for trip "${title}"`);
       return { trip };
