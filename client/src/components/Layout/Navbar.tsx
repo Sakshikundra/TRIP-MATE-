@@ -6,7 +6,7 @@ import { useSettingsStore } from '../../store/settingsStore'
 import { useAddonStore } from '../../store/addonStore'
 import { usePluginStore } from '../../store/pluginStore'
 import { useTranslation } from '../../i18n'
-import { Plane, LogOut, Settings, ChevronDown, Shield, ArrowLeft, Users, Moon, Sun, Monitor, CalendarDays, Briefcase, Globe, Compass, BookOpen, Bookmark } from 'lucide-react'
+import { Plane, LogOut, Settings, ChevronDown, Shield, ArrowLeft, Users, Moon, Sun, Monitor, CalendarDays, Briefcase, Globe, Compass, BookOpen, Bookmark, Sparkles, Bot, Trophy } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import InAppNotificationBell from './InAppNotificationBell.tsx'
 import { resolvePluginIcon } from '../shared/PluginIcon'
@@ -20,6 +20,7 @@ interface NavbarProps {
   onBack?: () => void
   showBack?: boolean
   onShare?: () => void
+  onCompleteTrip?: () => void
 }
 
 interface Addon {
@@ -30,7 +31,7 @@ interface Addon {
   enabled: boolean
 }
 
-export default function Navbar({ tripTitle, tripId, onBack, showBack, onShare }: NavbarProps): React.ReactElement {
+export default function Navbar({ tripTitle, tripId, onBack, showBack, onShare, onCompleteTrip }: NavbarProps): React.ReactElement {
   const { user, logout, isPrerelease, appVersion } = useAuthStore()
   const { settings, updateSetting } = useSettingsStore()
   const { addons: allAddons, loadAddons } = useAddonStore()
@@ -124,9 +125,9 @@ export default function Navbar({ tripTitle, tripId, onBack, showBack, onShare }:
           </button>
         )}
 
-        <Link to="/dashboard" className="flex items-center transition-colors flex-shrink-0">
-          <img src={dark ? '/icons/icon-white.svg' : '/icons/icon-dark.svg'} alt="TripMate" className="sm:hidden" style={{ height: 22, width: 22 }} />
-          <img src={dark ? '/logo-light.svg' : '/logo-dark.svg'} alt="TripMate" className="hidden sm:block" style={{ height: 28 }} />
+        <Link to="/dashboard" className="flex items-center transition-transform hover:scale-[1.02] flex-shrink-0">
+          <img src="/icons/icon.svg" alt="Tripमेट" className="sm:hidden" style={{ height: 28, width: 28, borderRadius: 6 }} />
+          <img src={dark ? '/logo-light.svg' : '/trip-mate-logo.png'} alt="Tripमेट" className="hidden sm:block" style={{ height: 36, objectFit: 'contain' }} />
         </Link>
 
         {tripTitle && (
@@ -154,7 +155,7 @@ export default function Navbar({ tripTitle, tripId, onBack, showBack, onShare }:
           can happen: the pill takes the width it needs and the columns beside
           it give way. min-w-0 lets it shrink past its content and scroll rather
           than push the actions off the bar. */}
-      {(globalAddons.length > 0 || pagePlugins.length > 0) && !tripTitle && (
+      {!tripTitle && (
         <div
           className="trek-nav-pill min-w-0"
           style={{
@@ -166,6 +167,9 @@ export default function Navbar({ tripTitle, tripId, onBack, showBack, onShare }:
           }}
         >
           {[{ id: '__trips', path: '/dashboard', label: t('nav.myTrips'), Icon: Briefcase },
+            { id: '__volunteer', path: '/volunteer', label: 'Volunteer & Earn', Icon: Sparkles },
+            { id: '__ai-planner', path: '/ai-planner', label: 'AI Planner', Icon: Bot },
+            { id: '__rewards', path: '/rewards', label: 'Rewards', Icon: Trophy },
             ...globalAddons.map(a => ({ id: a.id, path: `/${a.id}`, label: getAddonName(a), Icon: ADDON_ICONS[a.icon] || CalendarDays })),
             ...pagePlugins.map(p => ({ id: `plugin:${p.id}`, path: `/plugins/${p.id}`, label: p.name, Icon: resolvePluginIcon(p.icon) })),
             // Empty in this repository — see client/src/managed.
@@ -175,17 +179,17 @@ export default function Navbar({ tripTitle, tripId, onBack, showBack, onShare }:
             return (
               <Link key={tab.id} to={tab.path}
                 title={tab.label} aria-label={tab.label}
-                className="flex items-center gap-1.5 transition-colors"
+                className="flex items-center gap-1.5 transition-all"
                 style={{
-                  padding: '5px 16px', borderRadius: 9, fontSize: 'calc(13.5px * var(--fs-scale-body, 1))', fontWeight: 500,
-                  color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
-                  background: isActive ? 'var(--bg-card)' : 'transparent',
-                  boxShadow: isActive ? '0 1px 2px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.05)' : 'none',
+                  padding: '5px 16px', borderRadius: 9, fontSize: 'calc(13.5px * var(--fs-scale-body, 1))', fontWeight: isActive ? 700 : 500,
+                  color: isActive ? (dark ? '#ffffff' : '#163e2b') : 'var(--text-muted)',
+                  background: isActive ? (dark ? 'rgba(255,255,255,0.14)' : '#ffffff') : 'transparent',
+                  boxShadow: isActive ? '0 1px 3px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04)' : 'none',
                 }}
                 onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = 'var(--text-primary)' }}
                 onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = 'var(--text-muted)' }}>
-                <tab.Icon className="w-4 h-4" />
-                <span className="hidden lg:inline">{tab.label}</span>
+                <tab.Icon className="w-4 h-4 text-[#e76f3c]" />
+                <span className="hidden sm:inline">{tab.label}</span>
               </Link>
             )
           })}
@@ -212,6 +216,16 @@ export default function Navbar({ tripTitle, tripId, onBack, showBack, onShare }:
           loose siblings, which centred nothing and left the pill to fend for
           itself on top of them. */}
       <div className="flex items-center gap-4 flex-1 basis-0 min-w-0 justify-end">
+
+      {onCompleteTrip && (
+        <button type="button" onClick={onCompleteTrip}
+          className="flex items-center gap-1.5 py-1.5 px-3 rounded-lg border transition-colors text-sm font-medium flex-shrink-0 border-edge text-content-secondary bg-surface-card"
+          onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-hover)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'var(--bg-card)'}>
+          <Trophy className="w-4 h-4" />
+          <span className="hidden sm:inline">Mark trip completed</span>
+        </button>
+      )}
 
       {/* Share button */}
       {onShare && (

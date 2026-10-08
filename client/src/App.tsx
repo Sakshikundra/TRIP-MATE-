@@ -58,6 +58,9 @@ const SharedTripPage = lazyWithRetry(() => import('./pages/SharedTripPage'))
 const JoinTripPage = lazyWithRetry(() => import('./pages/JoinTripPage'))
 const InAppNotificationsPage = lazyWithRetry(() => import('./pages/InAppNotificationsPage.tsx'))
 const OAuthAuthorizePage = lazyWithRetry(() => import('./pages/OAuthAuthorizePage'))
+const VolunteerPage = lazyWithRetry(() => import('./pages/VolunteerPage'))
+const AiPlannerPage = lazyWithRetry(() => import('./pages/AiPlannerPage'))
+const RewardsPage = lazyWithRetry(() => import('./pages/RewardsPage'))
 
 // The ten phone screens are chunks of their own, alongside the desktop pages
 // rather than inside them. Each page used to import its M screen statically and
@@ -408,7 +411,31 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-          {/* Trip invite link (#1143) — behind ProtectedRoute so an anonymous
+          <Route
+            path="/volunteer"
+            element={
+              <ProtectedRoute>
+                <VolunteerPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ai-planner"
+            element={
+              <ProtectedRoute>
+                <AiPlannerPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/rewards"
+            element={
+              <ProtectedRoute>
+                <RewardsPage />
+              </ProtectedRoute>
+            }
+          />
+          {/* A join link opens an invite with its token; when signed out the
               visitor is redirected to /login (never registration) and returns here. */}
           <Route
             path="/join/:token"

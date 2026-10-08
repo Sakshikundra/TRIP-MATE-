@@ -255,7 +255,7 @@ function TripPlannerPageDesktop(): React.ReactElement | null {
   // Page = wiring container: the entire planner state machine (store, tabs,
   // selection, CRUD handlers with undo, map filters, splash) lives in the hook.
   const {
-    tripId, navigate, toast, t, language, locale, settings, placesPhotosEnabled,
+    tripId, navigate, toast, t, language, locale, settings, placesPhotosEnabled, handleCompleteTrip,
     trip, days, places, assignments, packingItems, todoItems, categories, reservations, budgetItems, files,
     selectedDayId, isLoading, tripActions, can, canUploadFiles,
     pushUndo, undo, canUndo, lastActionLabel, handleUndo,
@@ -382,7 +382,14 @@ function TripPlannerPageDesktop(): React.ReactElement | null {
 
   return (
     <div style={{ position: 'fixed', inset: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden', ...fontStyle }}>
-      <Navbar tripTitle={trip.title} tripId={tripId} showBack onBack={() => navigate('/dashboard')} onShare={() => setShowMembersModal(true)} />
+      <Navbar
+        tripTitle={trip.title}
+        tripId={tripId}
+        showBack
+        onBack={() => navigate('/dashboard')}
+        onShare={() => setShowMembersModal(true)}
+        onCompleteTrip={can('trip_edit', trip) ? () => { void handleCompleteTrip() } : undefined}
+      />
 
       <div className="bg-surface-elevated border-b border-edge-faint" style={{
         position: 'fixed', top: 'var(--nav-h)', left: 0, right: 0, zIndex: 40,

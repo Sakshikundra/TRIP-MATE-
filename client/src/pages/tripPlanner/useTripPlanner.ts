@@ -12,7 +12,7 @@ import { useToast } from '../../components/shared/Toast'
 import { Map, Ticket, PackageCheck, Wallet, FolderOpen, Users, Train, Route } from 'lucide-react'
 import { resolvePluginIcon } from '../../components/shared/PluginIcon'
 import { useTranslation, translateApiError } from '../../i18n'
-import { addonsApi, accommodationsApi, authApi, tripsApi, assignmentsApi, healthApi, airtrailApi, mapsApi, placesApi } from '../../api/client'
+import { addonsApi, accommodationsApi, authApi, tripsApi, assignmentsApi, healthApi, airtrailApi, mapsApi, placesApi, rewardsApi } from '../../api/client'
 import { getDayOrder } from '../../utils/dayOrder'
 import { TRANSPORT_TYPES, timedSlot } from '../../utils/dayMerge'
 import { isOvernightCategory } from '../../components/Roadtrip/stopKinds'
@@ -2814,8 +2814,21 @@ export function useTripPlanner() {
     }
   }, [isLoading, trip])
 
+  const handleCompleteTrip = useCallback(async () => {
+    try {
+      const result = await rewardsApi.completeTrip(tripId)
+      toast.success(
+        result.alreadyAwarded
+          ? 'This trip has already been marked complete.'
+          : `Trip completed! You earned ${result.pointsAwarded} points.`,
+      )
+    } catch (error) {
+      toast.error(translateApiError(t, error, 'common.error'))
+    }
+  }, [tripId, toast, t])
+
   return {
-    tripId, navigate, toast, t, language, locale, settings, placesPhotosEnabled,
+    tripId, navigate, toast, t, language, locale, settings, placesPhotosEnabled, handleCompleteTrip,
     trip, days, places, assignments, storedAssignments, packingItems, todoItems, categories, reservations, budgetItems, files,
     selectedDayId, isLoading, tripActions, can, canUploadFiles,
     pushUndo, undo, canUndo, lastActionLabel, handleUndo,

@@ -328,7 +328,7 @@ export default function LoginPage(): React.ReactElement {
         style={{
           display: 'none',
           width: '55%',
-          background: '#070c1a',
+          background: '#061a12',
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
@@ -340,9 +340,7 @@ export default function LoginPage(): React.ReactElement {
       >
         <style>{`@media(min-width:1024px){.lg-panel{display:flex!important}}`}</style>
 
-        {/* Aurora — three drifting colour fields. They are the whole background:
-            deep indigo, a cold cyan and a warm violet, blurred past recognition so
-            what is left is the gradient, not the shapes. */}
+        {/* Aurora — three drifting Indian nature colour fields (forest green, warm saffron, sun gold) */}
         <div className="login-aurora login-aurora-a" />
         <div className="login-aurora login-aurora-b" />
         <div className="login-aurora login-aurora-c" />
@@ -376,16 +374,17 @@ export default function LoginPage(): React.ReactElement {
         {/* No max-width: the tagline stays on one line, so the block is allowed to
             use the whole panel rather than wrapping inside it. */}
         <div style={{ position: 'relative', zIndex: 1, maxWidth: '100%', textAlign: 'center' }}>
-          {/* Logo. The soft dark halo is what separates it from the dot map behind —
-              wide and low-opacity rather than a hard drop shadow, so it reads as the
-              map dimming around the mark instead of an outline. */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+          {/* Logo */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
             <img
-              src="/logo-light.svg"
-              alt="TripMate"
+              src="/trip-mate-logo.png"
+              alt="Tripमेट"
               style={{
-                height: 'clamp(58px, 5.2vw, 84px)',
-                filter: 'drop-shadow(0 2px 10px rgba(4,8,20,0.55)) drop-shadow(0 0 34px rgba(4,8,20,0.45))',
+                height: 'clamp(95px, 9vw, 140px)',
+                maxWidth: '90%',
+                objectFit: 'contain',
+                borderRadius: 20,
+                filter: 'drop-shadow(0 6px 24px rgba(0,0,0,0.5)) drop-shadow(0 0 30px rgba(231,111,60,0.25))',
               }}
             />
           </div>
@@ -394,15 +393,14 @@ export default function LoginPage(): React.ReactElement {
             style={{
               margin: 0,
               // Scales with the panel so it stays on one line in every language.
-              fontSize: 'calc(clamp(32px, 2.95vw, 46px) * var(--fs-scale-title, 1))',
-              fontWeight: 700,
+              fontSize: 'calc(clamp(30px, 2.75vw, 44px) * var(--fs-scale-title, 1))',
+              fontWeight: 800,
               color: 'white',
               lineHeight: 1.15,
               letterSpacing: '-0.02em',
-              fontFamily: "'MuseoModerno', sans-serif",
-              textTransform: 'lowercase',
+              fontFamily: "'Outfit', 'Plus Jakarta Sans', sans-serif",
               whiteSpace: 'nowrap',
-              textShadow: '0 2px 10px rgba(4,8,20,0.55), 0 0 34px rgba(4,8,20,0.5)',
+              textShadow: '0 2px 10px rgba(4,8,20,0.55), 0 0 34px rgba(231,111,60,0.4)',
             }}
           >
             {t('login.tagline')}
@@ -410,11 +408,9 @@ export default function LoginPage(): React.ReactElement {
           <p
             style={{
               margin: '10px 0 0',
-              // Must never wrap: the panel is a fixed share of the viewport, so the
-              // size follows it and a long translation shrinks instead of breaking.
               fontSize: 'calc(clamp(11px, 1.05vw, 16px) * var(--fs-scale-subtitle, 1))',
               whiteSpace: 'nowrap',
-              color: 'rgba(255,255,255,0.62)',
+              color: 'rgba(255,255,255,0.75)',
               lineHeight: 1.7,
               textShadow: '0 1px 8px rgba(4,8,20,0.6), 0 0 24px rgba(4,8,20,0.45)',
             }}
@@ -432,24 +428,23 @@ export default function LoginPage(): React.ReactElement {
           alignItems: 'center',
           justifyContent: 'center',
           padding: '32px 24px',
-          background: '#f9fafb',
+          background: '#f8fafc',
         }}
       >
         <div style={{ width: '100%', maxWidth: 400 }}>
           {/* Mobile logo */}
           <div
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, marginBottom: 36 }}
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, marginBottom: 28 }}
             className="mobile-logo"
           >
             <style>{`@media(min-width:1024px){.mobile-logo{display:none!important}}`}</style>
-            <img src="/logo-dark.svg" alt="TripMate" style={{ height: 48 }} />
+            <img src="/trip-mate-logo.png" alt="Tripमेट" style={{ height: 64, objectFit: 'contain', borderRadius: 12 }} />
             <p
               style={{
                 margin: 0,
-                fontSize: 'calc(16px * var(--fs-scale-subtitle, 1))',
-                color: '#9ca3af',
-                fontFamily: "'MuseoModerno', sans-serif",
-                textTransform: 'lowercase',
+                fontSize: 'calc(15px * var(--fs-scale-subtitle, 1))',
+                color: '#64748b',
+                fontWeight: 600,
                 whiteSpace: 'nowrap',
               }}
             >
@@ -1255,17 +1250,17 @@ export default function LoginPage(): React.ReactElement {
         }
         .login-aurora-a {
           width: 620px; height: 620px; top: -12%; left: -14%;
-          background: radial-gradient(circle, rgba(79,70,229,0.55) 0%, rgba(79,70,229,0) 68%);
+          background: radial-gradient(circle, rgba(27,67,50,0.85) 0%, rgba(27,67,50,0) 68%);
           animation: auroraA 34s ease-in-out infinite;
         }
         .login-aurora-b {
           width: 520px; height: 520px; bottom: -16%; right: -10%;
-          background: radial-gradient(circle, rgba(6,182,212,0.4) 0%, rgba(6,182,212,0) 70%);
+          background: radial-gradient(circle, rgba(231,111,60,0.65) 0%, rgba(231,111,60,0) 70%);
           animation: auroraB 44s ease-in-out infinite;
         }
         .login-aurora-c {
           width: 460px; height: 460px; top: 42%; left: 34%;
-          background: radial-gradient(circle, rgba(168,85,247,0.32) 0%, rgba(168,85,247,0) 72%);
+          background: radial-gradient(circle, rgba(251,176,64,0.45) 0%, rgba(251,176,64,0) 72%);
           animation: auroraC 52s ease-in-out infinite;
         }
         @keyframes auroraA {
